@@ -1,7 +1,7 @@
 import sys
 from logger_file import logger
 def error_message(error,error_detail:sys):
-    _,_,exc_tb=error_detail.exc_info()   #extracting the traceback
+    _,_,exc_tb=error_detail.exc_info()   #extracting the traceback by using the exc_info() method of the sys module, which returns a tuple containing the type, value, and traceback of the exception. We are only interested in the traceback, so we unpack the tuple and assign it to exc_tb.
     print(error_detail.exc_info())
     file_name = exc_tb.tb_frame.f_code.co_filename
     line_number = exc_tb.tb_lineno
@@ -14,7 +14,7 @@ def error_message(error,error_detail:sys):
 class CustomError(Exception):
     def __init__(self,message,error_detail:sys):
         self.error_message = error_message(message,error_detail=error_detail)
-    def __str__(self):
+    def __str__(self):  #when we print the error, it will return the error message
      return self.error_message
 
 
