@@ -1,15 +1,20 @@
 import sys
 import os
-
+import pandas as pd
 from sklearn.compose import ColumnTransformer
-
 from src.logger_file import logging
 from src.exception import CustomError
 from sklearn.preprocessing import StandardScaler, OneHotEncoder , OrdinalEncoder
 from sklearn.pipeline import Pipeline
 from dataclasses import dataclass
 from sklearn.impute import SimpleImputer
+from data_ingestion import DataIngestion
+import numpy as np
 
+
+dataingestion = DataIngestion()  #creating an object for data ingestion class to get the train and test data paths
+train_data_path = dataingestion.initiate_dataingestion()[0]  #getting the train data path from the data ingestion class
+test_data_path = dataingestion.initiate_dataingestion()[1]   #getting the test data path from the data ingestion class
 @dataclass
 class DataTransformationConfig:  #this class is used for making a filepath for our preprocessor object
     preprocessor_obj_filepath:str = os.path.join('artifacts','preprocessor.pkl')
@@ -35,11 +40,13 @@ class DataTransformation:
                 ('imputer', SimpleImputer(strategy='median')),  #for filling the null values
                 ('scalar', StandardScaler()),     #for standard scaling
             ])
+            logging.info("Numerical pipeline created successfully")
 
             nominal_cat_pipeline = Pipeline([
                 ('imputer',SimpleImputer(strategy='most_frequent')),
-                ('encoder', OneHotEncoder())
+                ('encoder', OneHotEncoder(sparse_output=False))
             ])
+            logging.info("Nominal categorical pipeline created successfully")
 
             ordinal_cat_pipeline = Pipeline([
                 ('imputer', SimpleImputer(strategy='most_frequent')),
@@ -50,6 +57,7 @@ class DataTransformation:
                     ]
                 ))
             ])
+            logging.info("Ordinal categorical pipeline created successfully")
 
             preprocessor = ColumnTransformer(
                 [
@@ -58,16 +66,52 @@ class DataTransformation:
                     ('ordinal_cat_pipeline', ordinal_cat_pipeline, ordinal_categorical_features)
                 ]
             )
-
+            logging.info("Column transformer created successfully")
             return preprocessor
-
-
-
-
-
-
-
-
         except Exception as e:
-            raise CustomError(e,sys)
+            raise CustomError(e,sys)    
 
+    
+    
+    def initiate_data_transformation(self,train_path, test_path):
+            try:
+                 #reading the train and test data from their relative paths
+                train_data_df = pd.read_csv(train_path) 
+                test_data_df = pd.read_csv(test_path)
+                logging.info("Train and test data read successfully")
+
+                preprocessor_obj = self.get_data_transformer_obj()
+                logging.info("Preprocessor object obtained successfully")
+                
+                target_column = 'salary'
+                X_train = train_data_df.drop(columns=[target_column], axis=1)
+                y_train = train_data_df[target_column]
+                X_test = test_data_df.drop(columns=[target_column], axis=1)
+                y_test = test_data_df[target_column]
+                logging.info("Train and test data split into features and target variable successfully")
+
+                X_train_transformed = preprocessor_obj.fit_transform(X_train)  #this returns the array after applying the transformations on the train data
+                X_test_transformed = preprocessor_obj.transform(X_test)
+
+                logging.info("Train and test data transformed successfully")   
+                train_array = np.c_[X_train_transformed, y_train]
+                test_array = np.c_[X_test_transformed, y_test]
+
+                return train_array, test_array, self.config.preprocessor_obj_filepath
+
+
+
+
+
+            except Exception as e:
+                raise CustomError(e,sys)    
+
+
+
+    
+
+
+if __name__=="__main__":
+    obj = DataTransformation()
+    obj.get_data_transformer_obj()   
+k
