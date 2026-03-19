@@ -13,9 +13,8 @@ import numpy as np
 from src.utils import save_object
 
 
-dataingestion = (
-    DataIngestion()
-)  # creating an object for data ingestion class to get the train and test data paths
+dataingestion = DataIngestion()
+ # creating an object for data ingestion class to get the train and test data paths
 train_data_path = dataingestion.initiate_dataingestion()[
     0
 ]  # getting the train data path from the data ingestion class
@@ -119,7 +118,7 @@ class DataTransformation:
         except Exception as e:
             raise CustomError(e, sys)
 
-    def initiate_data_transformation(self, train_path, test_path):
+    def initiate_data_transformation(self, train_path, test_path):  #this method is used for reading the train and test data from their relative paths, then applying the transformations on the train and test data and finally saving the preprocessor object into a file
         try:
             # reading the train and test data from their relative paths
             train_data_df = pd.read_csv(train_path)

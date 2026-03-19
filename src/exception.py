@@ -1,8 +1,7 @@
 import sys
-import logging
+from src.logger_file import logging
 def error_message(error,error_detail:sys):
     _,_,exc_tb=error_detail.exc_info()   #extracting the traceback by using the exc_info() method of the sys module, which returns a tuple containing the type, value, and traceback of the exception. We are only interested in the traceback, so we unpack the tuple and assign it to exc_tb.
-    print(error_detail.exc_info())
     file_name = exc_tb.tb_frame.f_code.co_filename
     line_number = exc_tb.tb_lineno
     error_message = f"Error {error} occurred in file {file_name} at line number {line_number}: "
@@ -22,5 +21,5 @@ if __name__=="__main__":
     try:
         1 / 0
     except Exception as e:
-        logging.info(e)
+        logger.info(e)
         raise CustomError(message=str(e),error_detail=sys)

@@ -14,7 +14,7 @@ class DataIngestionConfig:  #this class is used for making files or defining fil
 
 class DataIngestion:  #this class is used for reading dataset and split into train and test dataset then store into their relative paths , which were defined above
     def __init__(self):
-        self.config = DataIngestionConfig()
+        self.config = DataIngestionConfig()  #for the filepaths of train,test and raw datasets
     def initiate_dataingestion(self): #this object ingest the datas into their corresponding paths
         try:
             logging.info('DataIngestion initiated')
