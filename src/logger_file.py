@@ -10,4 +10,3 @@ logging.basicConfig(level=logging.INFO,
                     filename= file_path,
                     style="{"
                     )
-logger=logging.getLogger(__name__)  #creating an instance of logging

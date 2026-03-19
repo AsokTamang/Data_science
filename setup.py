@@ -6,7 +6,7 @@ from typing import List
 hyphen = '-e .'
 def get_requirements(filepath:str)->List[str]:
     with open(filepath) as f:
-        requirements = f.read().splitlines()
+        requirements = f.read().splitlines()  #it returns the list of lines in the given filepath
         if hyphen in requirements:  #as we have used -e . in our requirements.txt file to connect with our setup.py file, so we must remove them here
             requirements.remove(hyphen)
         return requirements  #returning the list of the required packages

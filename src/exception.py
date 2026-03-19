@@ -1,5 +1,5 @@
 import sys
-from logger_file import logger
+import logging
 def error_message(error,error_detail:sys):
     _,_,exc_tb=error_detail.exc_info()   #extracting the traceback by using the exc_info() method of the sys module, which returns a tuple containing the type, value, and traceback of the exception. We are only interested in the traceback, so we unpack the tuple and assign it to exc_tb.
     print(error_detail.exc_info())
@@ -22,5 +22,5 @@ if __name__=="__main__":
     try:
         1 / 0
     except Exception as e:
-        logger.info(e)
+        logging.info(e)
         raise CustomError(message=str(e),error_detail=sys)

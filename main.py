@@ -1,3 +1,3 @@
-from src.logger_file import logger
-
-logger.info('logging started')
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent))
