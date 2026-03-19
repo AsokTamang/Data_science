@@ -7,9 +7,9 @@ from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 @dataclass
 class DataIngestionConfig:  #this class is used for making files or defining file path where train,test and raw datas exist
-    train_data_path: str = 'artifacts/train_data.csv'
-    test_data_path: str = 'artifacts/test_data.csv'
-    raw_data_path: str = 'artifacts/raw_data.csv'
+    train_data_path: str = os.path.join('artifacts','train_data.csv')
+    test_data_path: str = os.path.join('artifacts','test_data.csv')
+    raw_data_path: str = os.path.join('artifacts','raw_data.csv')
 
 
 class DataIngestion:  #this class is used for reading dataset and split into train and test dataset then store into their relative paths , which were defined above
@@ -18,8 +18,8 @@ class DataIngestion:  #this class is used for reading dataset and split into tra
     def initiate_dataingestion(self): #this object ingest the datas into their corresponding paths
         try:
             logging.info('DataIngestion initiated')
-            os.makedirs(os.path.dirname(self.config.train_data_path), exist_ok=True)
-            df = pd.read_csv('C:/pythonprojects/Machine learning/resume_projects/Data_science/notebook/data/ai_job_market.csv')
+            os.makedirs(os.path.dirname(self.config.raw_data_path), exist_ok=True)
+            df = pd.read_csv(os.path.join('notebook','data','ai_job_market.csv'))  #reading the dataset
             logging.info('Read the dataset')
             df.to_csv(self.config.raw_data_path, index=False, header = True)
             train_data,test_data = train_test_split(df,test_size=0.2,random_state=42)
