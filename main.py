@@ -3,8 +3,9 @@ from src.exception import CustomError
 from src.logger_file import logging
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, JSONResponse
-from src.pipeline.predict_pipeline import PredictPipeline, CustomData
+from fastapi.responses import FileResponse
+from src.pipeline.predict_pipeline import PredictPipeline
+from src.pipeline.data_validation_pipeline import CustomData
 from pydantic import BaseModel
 from typing import Union
 import uvicorn
@@ -46,7 +47,7 @@ def prediction_form():
 
 
 @app.post('/predict')
-def predict(data: PredictRequest):
+def predict(data: PredictRequest): #the type of data is the pydantic model which we created above to receive the json data from the html form
     try:
         features = CustomData(
             job_title=data.job_title,
@@ -72,7 +73,7 @@ def predict(data: PredictRequest):
         predict_pipeline = PredictPipeline()
         result = predict_pipeline.predict(df_features)
 
-        return {'prediction': float(result[0])}  # ✅ extract [0] from numpy array
+        return {'prediction': float(result[0])}  #extracts [0] from numpy array
 
     except Exception as e:
         logging.error(f"Prediction error: {e}")
