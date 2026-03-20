@@ -6,4 +6,5 @@ scikit_learn
 xgboost
 dill
 fastapi
+uvicorn
 -e .
