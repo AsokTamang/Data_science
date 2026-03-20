@@ -39,7 +39,7 @@ class ModelTrainer:
     def initiate_model_trainer(self, train_array, test_array):
         try:
                 logging.info("Model training initiated")
-                X_train, y_train = train_array[:, :-1], train_array[:, -1]
+                X_train, y_train = train_array[:, :-1], train_array[:, -1]  #as the last column is a target variable ,we are skipping the last column and taking all the other columns as the features and taking the last column as the target variable
                 X_test, y_test = test_array[:, :-1], test_array[:, -1]
                 models = {
                     "Linear Regression": LinearRegression(),
@@ -66,6 +66,8 @@ class ModelTrainer:
                     "Decision Tree": {"max_depth": [None, 10, 20]},
                 }
                 best_model,best_model_score = model_evaluation(X_train, y_train, X_test, y_test, models,params)
+                if best_model_score < 0.6:
+                    raise CustomError("No best model found with score greater than 0.6", sys)
                 logging.info(f"Best model found on both training and testing dataset with score of {best_model_score}")
                 save_object(file_path=self.config.trained_model_file_path, obj=best_model)
                 logging.info(f"Trained model saved at {self.config.trained_model_file_path}")

@@ -18,7 +18,7 @@ class DataIngestion:  #this class is used for reading dataset and split into tra
     def initiate_dataingestion(self): #this object ingest the datas into their corresponding paths
         try:
             logging.info('DataIngestion initiated')
-            os.makedirs(os.path.dirname(self.config.raw_data_path), exist_ok=True)
+            os.makedirs(os.path.dirname(self.config.raw_data_path), exist_ok=True)  #first we must create a directory for storing the raw data, if it doesn't exist already
             df = pd.read_csv(os.path.join('notebook','data','ai_job_market.csv'))  #reading the dataset
             logging.info('Read the dataset')
             df.to_csv(self.config.raw_data_path, index=False, header = True)

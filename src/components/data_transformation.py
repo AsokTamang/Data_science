@@ -114,7 +114,7 @@ class DataTransformation:
                 ]
             )
             logging.info("Column transformer created successfully")
-            return preprocessor
+            return preprocessor  #blueprint of the transformers that we have to apply on the train and test data
         except Exception as e:
             raise CustomError(e, sys)
 
@@ -139,10 +139,12 @@ class DataTransformation:
 
             X_train_transformed = preprocessor_obj.fit_transform(
                 X_train
-            )  # this returns the array after applying the transformations on the train data
+            )  # this returns 2D array after applying the transformations on the train data
             X_test_transformed = preprocessor_obj.transform(X_test)
 
             logging.info("Train and test data transformed successfully")
+            print(f'shape of X_train_transformed: {X_train_transformed.shape}')
+            print(f'shape of y_train: {y_train.shape}')
             train_array = np.c_[
                 X_train_transformed, y_train
             ]  # this is used for concatenating the transformed features and target variable into a single array for the train data
