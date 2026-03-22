@@ -89,15 +89,26 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2      # ✅ updated
+      
+      - name: Stop and remove container if running   # 1️⃣ stop container first
+        run: |
+          docker ps -q --filter "name=salary_prediction" | grep -q . && docker stop salary_prediction && docker rm -fv salary_prediction || true
+
+      - name: Remove old Docker image                # 2️⃣ then remove old image
+        run: |
+          docker rmi $(docker images -q) --force 2>/dev/null || true
+          docker system prune -af
+          df -h 
+
+
+
+
 
       - name: Pull latest images
         run: |
           docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:salary_prediction
 
-      - name: Stop and remove container if running  # ✅ uncommented
-        run: |
-          docker ps -q --filter "name=salary_prediction" | grep -q . && docker stop salary_prediction && docker rm -fv salary_prediction || true
-
+      
       - name: Run Docker Image to serve users
         run: |
           docker run -d -p 8000:8000 --ipc="host" --name=salary_prediction \
