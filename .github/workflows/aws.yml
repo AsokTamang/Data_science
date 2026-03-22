@@ -96,7 +96,7 @@ jobs:
 
       - name: Stop and remove container if running  # ✅ uncommented
         run: |
-          docker ps -q --filter "name=salary_prediction" | grep -q . && docker stop salary_prediction && docker rm -fv salary_prediction
+          docker ps -q --filter "name=salary_prediction" | grep -q . && docker stop salary_prediction && docker rm -fv salary_prediction || true
 
       - name: Run Docker Image to serve users
         run: |
