@@ -21,5 +21,5 @@ if __name__=="__main__":
     try:
         1 / 0
     except Exception as e:
-        logger.info(e)
+        logging.info(e)
         raise CustomError(message=str(e),error_detail=sys)
