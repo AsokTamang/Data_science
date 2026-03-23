@@ -7,9 +7,9 @@ from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 @dataclass
 class DataIngestionConfig:  #this class is used for making files or defining file path where train,test and raw datas exist
-    train_data_path: str = os.path.join('artifacts','train_data.csv')
-    test_data_path: str = os.path.join('artifacts','test_data.csv')
-    raw_data_path: str = os.path.join('artifacts','raw_data.csv')
+    train_data_path: str = os.path.join('root_data','train_data.csv')
+    test_data_path: str = os.path.join('root_data','test_data.csv')
+    raw_data_path: str = os.path.join('root_data','raw_data.csv')
 
 
 class DataIngestion:  #this class is used for reading dataset and split into train and test dataset then store into their relative paths , which were defined above
