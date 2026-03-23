@@ -9,6 +9,7 @@ from src.pipeline.data_validation_pipeline import CustomData
 from pydantic import BaseModel
 from typing import Union
 import uvicorn
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
@@ -77,7 +78,7 @@ def predict(data: PredictRequest): #the type of data is the pydantic model which
 
     except Exception as e:
         logging.error(f"Prediction error: {e}")
-        raise CustomError(e, sys)
+        return JSONResponse({"error": str(e)}, status_code=500)
     
 
 if __name__=="__main__":

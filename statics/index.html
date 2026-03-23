@@ -561,7 +561,11 @@
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      if (!res.ok) {
+        const body = await body.json();
+        throw new Error(body.error);
+
+      }
 
       const data = await res.json();
 
